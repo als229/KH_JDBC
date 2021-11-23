@@ -244,51 +244,49 @@ public class MemberDao {
 	}
 
 	public ArrayList<Member> selectByKeyword(String keyword) {
-		
+
 		// 0) 필요한 변수를 셋팅
 		// 조회된 한 회원에 대한 정보를 담을 변수
 		ArrayList<Member> list = new ArrayList<>();
-		
+
 		// JDBC 관련 객체들 선언
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet rSet = null;
-		
+
 		// 실행할 SQL문 (완성된 형태)
 
-		String sql = "SELECT * FROM MEMBER WHERE USERNAME LIKE '%"+keyword+"%'";
-		
+		String sql = "SELECT * FROM MEMBER WHERE USERNAME LIKE '%" + keyword + "%'";
+
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
-			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","JDBC","JDBC");
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "JDBC", "JDBC");
 			stmt = conn.createStatement();
 			rSet = stmt.executeQuery(sql);
-		
-			while(rSet.next()) {
+
+			while (rSet.next()) {
 				Member m = new Member();
-				
-			
-			m.setUserNo(rSet.getInt("USERNO"));
-			m.setUserId(rSet.getString("USERID"));	
-			m.setUserPwd(rSet.getString("USERPWD"));	
-			m.setUserName(rSet.getString("USERNAME"));	
-			m.setGender(rSet.getString("GENDER"));	
-			m.setAge(rSet.getInt("AGE"));	
-			m.setEmail(rSet.getString("EMAIL"));	
-			m.setPhone(rSet.getString("PHONE"));	
-			m.setAddress(rSet.getString("ADDRESS"));	
-			m.setHobby(rSet.getString("HOBBY"));	
-			m.setEnrollDate(rSet.getDate("ENROLLDATE"));	
-				
-			list.add(m);
+
+				m.setUserNo(rSet.getInt("USERNO"));
+				m.setUserId(rSet.getString("USERID"));
+				m.setUserPwd(rSet.getString("USERPWD"));
+				m.setUserName(rSet.getString("USERNAME"));
+				m.setGender(rSet.getString("GENDER"));
+				m.setAge(rSet.getInt("AGE"));
+				m.setEmail(rSet.getString("EMAIL"));
+				m.setPhone(rSet.getString("PHONE"));
+				m.setAddress(rSet.getString("ADDRESS"));
+				m.setHobby(rSet.getString("HOBBY"));
+				m.setEnrollDate(rSet.getDate("ENROLLDATE"));
+
+				list.add(m);
 			}
-		
-		
+
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}finally {
+		} finally {
 			try {
 				rSet.close();
 				stmt.close();
@@ -304,21 +302,74 @@ public class MemberDao {
 		int result = 0;
 		Connection conn = null;
 		Statement stmt = null;
-		
-		String sql = "UPDATE MEMBER SET USERID = "
-		+ "'" + m.getUserId() + "' , USERPWD = "
-		+ "'" + m.getUserPwd() + "' , USERNAME = "
-		+ "'" + m.getUserName() + "', GENDER = "
-		+ "'" + m.getGender() + "', AGE = "
-		+ m.getAge() + ", EMAIL = "
-		+ "'" + m.getEmail() + "' , PHONE = "
-		+ "'" + m.getPhone() + "' , ADDRESS = "
-		+ "'" + m.getAddress() + "' , HOBBY = "
-		+ "'" + m.getHobby() + "' WHERE USERNAME = " 
-		+ "'" + m.
-		;
-		
-		
-		return 0;
+
+		String sql = "UPDATE MEMBER SET USERID = " + "'" + m.getUserId() + "' , USERPWD = " + "'" + m.getUserPwd()
+				+ "' , USERNAME = " + "'" + m.getUserName() + "', GENDER = " + "'" + m.getGender() + "', AGE = "
+				+ m.getAge() + ", EMAIL = " + "'" + m.getEmail() + "' , PHONE = " + "'" + m.getPhone()
+				+ "' , ADDRESS = " + "'" + m.getAddress() + "' , HOBBY = " + "'" + m.getHobby() + "' WHERE USERID = "
+				+ "'" + m.getInputUserId() + "'";
+
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "JDBC", "JDBC");
+			stmt = conn.createStatement();
+			result = stmt.executeUpdate(sql);
+
+			if (result > 0) {
+				conn.commit();
+			} else {
+				conn.rollback();
+			}
+
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return result;
+	}
+
+	public int deleteMember(String userId) {
+
+		int result = 0;
+		Connection conn = null;
+		Statement stmt = null;
+
+		String sql = "DELETE FROM MEMBER WHERE USERID = " + "'" + userId + "'";
+
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "JDBC", "JDBC");
+			stmt = conn.createStatement();
+
+			result = stmt.executeUpdate(sql);
+
+			if (result > 0) {
+				conn.commit();
+			} else {
+				conn.rollback();
+			}
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return result;
 	}
 }

@@ -65,6 +65,7 @@ public class MemberController {
 
 	/**
 	 * 사용자의 아이디로 검색 요청을 처리해주는 메서드
+	 * 
 	 * @param userId : 사용자가 입력한 검색하고자 하는 아이디
 	 */
 	public void selectByUserId(String userId) { // SELECT 문 => ResultSet(1행)
@@ -83,58 +84,91 @@ public class MemberController {
 
 	/**
 	 * 사용자 이름의 keyword로 검색 요청을 처리해주는 메서드
+	 * 
 	 * @param keyword : 사용자가 입력한 검색하고자 하는 이름 keyword
 	 */
 	public void selectByKeyword(String keyword) {
 		// SELECT 문 => ResultSet(1행) => Member
-		 
+
 		ArrayList<Member> m = new MemberDao().selectByKeyword(keyword);
-		
+
 		// 조회 결과가 있는지 없는지 판단 후 사용자가 보게 될 View 지정
-		
-		if(m == null) {
+
+		if (m == null) {
 			new MemberView().displayNodata(keyword + "에 대한 검색 결과가 없습니다.");
 		} else { // 조회 결과가 있는 경우
 			new MemberView().displayList(m);
 		}
-		
-	}
-	
-	public void updateMember(String userId, String userPwd, String userName, String gender, int age, String email,
-			String phone, String address, String hobby) {
 
-		Member m = new Member(userId, userPwd, userName, gender, age, email, phone, address, hobby);
-
-		int result = new MemberDao().updateMember(m);
-		
-		if(result > 0) {
-			new MemberView().displaySuccess(userId + "님의 정보를 수정하였습니다.");
-		}else {
-			new MemberView().displayFail("회원 수정 실패 !!!!");
-		}
-		
 	}
-	
-	
 
 	/**
-	 * 바꾸고 싶은 ID를 받아 수정할 메서드
-	 * @param userId : 사용자가 바꾸고싶은 회원의 Id
+	 * 업데이트할 메서드
+	 * 
+	 * @param inputUserId : WHERE 에 집어넣을 입력받은 ID
+	 * @param userId
+	 * @param userPwd
+	 * @param userName
+	 * @param gender
+	 * @param age
+	 * @param email
+	 * @param phone
+	 * @param address
+	 * @param hobby
 	 */
-	public int updateLogin(String inputUserId,String inputUserPwd) {
-		
-		int count = 0;
-		
-		Member m = new MemberDao().selectByUserId(inputUserId);
-		
-		
-		if(m == null) {
-			return ;
-		}else {
-			new MemberView().displayFail("아이디 비번 불일치");
+	public void updateMember(String inputUserId, String userId, String userPwd, String userName, String gender, int age,
+			String email, String phone, String address, String hobby) {
+
+		Member m = new Member(inputUserId, userId, userPwd, userName, gender, age, email, phone, address, hobby);
+
+		int result = new MemberDao().updateMember(m);
+
+		if (result > 0) {
+			new MemberView().displaySuccess(userId + "님의 정보를 수정하였습니다.");
+		} else {
+			new MemberView().displayFail("회원 수정 실패 !!!!");
 		}
-		
-		return count;
+
 	}
-	
+
+	/**
+	 * 비밀번호 아이디 확인하는 메서드
+	 * 
+	 * @param inputUserId  : 바꾸고싶은 ID
+	 * @param inputUserPwd : 바꾸고시은 ID 비밀번호
+	 */
+	public int updateLoginId(String inputUserId, String inputUserPwd) {
+
+		Member m = new MemberDao().selectByUserId(inputUserId);
+
+		if (m == null) {
+			new MemberView().displayFail("조회하신 아이디가 없슴다.");
+			return 1;
+		}
+
+		if (m.getUserPwd().equals(inputUserPwd)) {
+			new MemberView().displaySuccess("감사합니다");
+			return 2;
+		} else {
+			System.out.println("비밀번호가 틀렸슴다.");
+			return 1;
+		}
+
+	}
+
+	/**
+	 * @param userId
+	 */
+	public void deleteMember(String userId) {
+
+		int result = new MemberDao().deleteMember(userId);
+
+		if (result > 0) {
+			new MemberView().displaySuccess("회원 삭제 성공");
+		} else {
+			new MemberView().displayFail("회원 삭제 실패");
+		}
+
+	}
+
 }

@@ -37,12 +37,12 @@ public class Member {
 	private String address;// ADDRESS VARCHAR2(100)
 	private String hobby; // HOBBY VARCHAR2(50)
 	private Date enrollDate;// ENROLLDATE DATE
-	private String InputUserPwd;
-	private String InputUserId;
-	
-	
-	public Member() {}
-	
+	private String inputUserId;
+	private String inputUserPwd;
+
+	public Member() {
+	}
+
 	public Member(int userNo, String userId, String userPwd, String userName, String gender, int age, String email,
 			String phone, String address, String hobby, Date enrollDate) {
 		super();
@@ -58,7 +58,7 @@ public class Member {
 		this.hobby = hobby;
 		this.enrollDate = enrollDate;
 	}
-	
+
 	// 회원 추가용 생성자
 	public Member(String userId, String userPwd, String userName, String gender, int age, String email, String phone,
 			String address, String hobby) {
@@ -72,13 +72,12 @@ public class Member {
 		this.address = address;
 		this.hobby = hobby;
 	}
-	
-	public Member(String inputUserId, String InputUserPwd, String userId, String userPwd, String userName, String gender, int age, String email, String phone,
-			String address, String hobby) {
-		
-		
-		this.InputUserId = inputUserId;
-		this.InputUserPwd = InputUserPwd;
+
+	// updateMember 에서 쓸 생성자
+	public Member(String inputUserId, String userId, String userPwd, String userName, String gender, int age,
+			String email, String phone, String address, String hobby) {
+
+		this.inputUserId = inputUserId;
 		this.userId = userId;
 		this.userPwd = userPwd;
 		this.userName = userName;
@@ -90,69 +89,106 @@ public class Member {
 		this.hobby = hobby;
 	}
 
+	public String getInputUserPwd() {
+		return inputUserPwd;
+	}
+
+	public void setInputUserPwd(String inputUserPwd) {
+		this.inputUserPwd = inputUserPwd;
+	}
+
+	public String getInputUserId() {
+		return inputUserId;
+	}
+
+	public void setInputUserId(String inputUserId) {
+		this.inputUserId = inputUserId;
+	}
+
 	public int getUserNo() {
 		return userNo;
 	}
+
 	public void setUserNo(int userNo) {
 		this.userNo = userNo;
 	}
+
 	public String getUserId() {
 		return userId;
 	}
+
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
+
 	public String getUserPwd() {
 		return userPwd;
 	}
+
 	public void setUserPwd(String userPwd) {
 		this.userPwd = userPwd;
 	}
+
 	public String getUserName() {
 		return userName;
 	}
+
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
+
 	public String getGender() {
 		return gender;
 	}
+
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
+
 	public int getAge() {
 		return age;
 	}
+
 	public void setAge(int age) {
 		this.age = age;
 	}
+
 	public String getEmail() {
 		return email;
 	}
+
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
 	public String getPhone() {
 		return phone;
 	}
+
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
+
 	public String getAddress() {
 		return address;
 	}
+
 	public void setAddress(String address) {
 		this.address = address;
 	}
+
 	public String getHobby() {
 		return hobby;
 	}
+
 	public void setHobby(String hobby) {
 		this.hobby = hobby;
 	}
+
 	public Date getEnrollDate() {
 		return enrollDate;
 	}
+
 	public void setEnrollDate(Date enrollDate) {
 		this.enrollDate = enrollDate;
 	}
@@ -163,7 +199,5 @@ public class Member {
 				+ ", gender=" + gender + ", age=" + age + ", email=" + email + ", phone=" + phone + ", address="
 				+ address + ", hobby=" + hobby + ", enrollDate=" + enrollDate + "]";
 	}
-	
-	
-	
+
 }
